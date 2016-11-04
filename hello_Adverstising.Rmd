@@ -1,0 +1,50 @@
+---
+title: "hello_Adverstising"
+author: "tx.huang@haplox.com"
+date: "2016/11/3"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+The Advertising data set.
+
+```{r Advertising}
+con = url ("http://www-bcf.usc.edu/~gareth/ISL/Advertising.csv")
+Advertising=read.csv(con,row.names=1)
+summary(Advertising)
+
+```
+
+## Including Plots
+
+```{r pressure, echo=FALSE}
+mylm = lm(Sales~TV,data=Advertising)
+plot(Advertising$TV,Advertising$Sales, col="red")
+abline(mylm) 
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+We define the **residual sum of squares (RSS)** as
+$$RSS=(y_1-\hat{\beta_0}-\hat{\beta_1}*x_1)^{2}+(y_2-\hat{\beta_1}-\hat{\beta_0}*x_2)^{2}+...+(y_n-\hat{\beta_0}-\hat{\beta_1}*x_n)^{2}$$
+The least squares approach chooses $$\hat{\beta_0}$$ and $$\hat{\beta_1}$$ to minimize the RSS. Using some calculus, one can show that the minimizers are
+$$\hat{\beta_1}=\frac{\sum_{i=1}^n(x_i-\bar{x})*(y_i-\bar{y})}{\sum_{i=1}^n(x_i-\bar{x})^{2}} $$
+$$\hat{\beta_0}=\bar{y}-\hat{\beta_1}*\bar{x}$$
+```{r }
+beta1 <- sum((Advertising$TV-mean(Advertising$TV)) * (Advertising$Sales-mean(Advertising$Sales)))  / sum((Advertising$TV-mean(Advertising$TV))^2)
+beta0 <- mean(Advertising$Sales)-beta1*mean(Advertising$TV)
+
+```
+we get $\hat{\beta_1}$
+```{r}
+print(beta1)
+```
+we get $\hat{\beta_0}$
+```{r}
+print(beta0)
+```
